@@ -419,11 +419,19 @@ class ConstructionUtility
 
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void CheckTemperature()
+    void CheckTemperature(Parameters &CheckTemperatureParameters)
     {
         KRATOS_TRY;
 
         const int nnodes = mrThermalModelPart.GetMesh(0).Nodes().size();
+
+        double time = mrThermalModelPart.GetProcessInfo()[TIME];
+        time = time / mTimeUnitConverter;
+        const double ambient_temp = mrTableAmbientTemp.GetValue(time);
+
+        // Getting CheckTemperature Values
+        const double maximum_temperature_increment = CheckTemperatureParameters["maximum_temperature_increment"].GetDouble();
+        const double minimum_temperature = CheckTemperatureParameters["minimum_temperature"].GetDouble();
 
         ModelPart::NodesContainerType::iterator it_begin = mrThermalModelPart.NodesBegin();
 
@@ -434,12 +442,16 @@ class ConstructionUtility
 
             if (it->Is(ACTIVE) && it->IsNot(SOLID))
             {
-                if (it->FastGetSolutionStepValue(TEMPERATURE) > (it->FastGetSolutionStepValue(PLACEMENT_TEMPERATURE) + 23.0))
+                double maximum_temperature = std::max(it->FastGetSolutionStepValue(PLACEMENT_TEMPERATURE) + maximum_temperature_increment, ambient_temp);
+                double current_temperature = it->FastGetSolutionStepValue(TEMPERATURE);
+
+                if (current_temperature > maximum_temperature)
                 {
-                    it->FastGetSolutionStepValue(TEMPERATURE) = it->FastGetSolutionStepValue(PLACEMENT_TEMPERATURE) + 23.0;
+                    it->FastGetSolutionStepValue(TEMPERATURE) = maximum_temperature;
                 }
-                if (it->FastGetSolutionStepValue(TEMPERATURE) < -7.5){
-                    it->FastGetSolutionStepValue(TEMPERATURE) = -7.5;
+                else if (current_temperature < minimum_temperature)
+                {
+                    it->FastGetSolutionStepValue(TEMPERATURE) = minimum_temperature;
                 }
             }
         }
