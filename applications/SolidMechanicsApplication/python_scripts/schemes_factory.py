@@ -133,7 +133,7 @@ class SolutionScheme:
                         # TODO: move_mesh flag
                         import KratosMultiphysics.PfemApplication as KratosPfem
                         options = KratosMultiphysics.Flags()
-                        options.Set(KratosSolid.SolverLocalFlags.MOVE_MESH, True)
+                        options.Set(KratosSolid.SolverLocalFlags.MOVE_MESH, False)
                         solution_scheme = KratosPfem.AleDynamicScheme(vector_integration_methods,scalar_integration_methods,options)
                     else:
                         raise Exception("ALE scheme needs vector and scalar integration methods.")

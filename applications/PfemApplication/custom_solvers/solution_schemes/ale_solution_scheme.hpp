@@ -320,8 +320,20 @@ class AleSolutionScheme : public DynamicScheme<TSparseSpace, TDenseSpace>
       (pCurrentElement) -> CalculateMassMatrix(this->mMatrix.M[thread], rCurrentProcessInfo);
       (pCurrentElement) -> CalculateLocalVelocityContribution(rLHS_Contribution, rRHS_Contribution, rCurrentProcessInfo);
 
+        if(pCurrentElement->Id()==2453)
+        {
+            KRATOS_WATCH("Abans de adddynamics")
+            KRATOS_WATCH(rRHS_Contribution)
+        }
+
       this->AddDynamicsToLHS (rLHS_Contribution, this->mMatrix.D[thread], this->mMatrix.M[thread], rCurrentProcessInfo);
       this->AddDynamicsToRHS (pCurrentElement, rRHS_Contribution, this->mMatrix.D[thread], this->mMatrix.M[thread], rCurrentProcessInfo);
+
+        if(pCurrentElement->Id()==2453)
+        {
+            KRATOS_WATCH("Despres de adddynamics")
+            KRATOS_WATCH(rRHS_Contribution)
+        }
 
     }
 

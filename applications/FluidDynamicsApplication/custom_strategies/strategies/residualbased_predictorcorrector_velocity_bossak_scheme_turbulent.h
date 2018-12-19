@@ -428,9 +428,21 @@ namespace Kratos {
 
             (rCurrentElement)->EquationIdVector(EquationId, CurrentProcessInfo);
 
+        if(rCurrentElement->Id()==2453)
+        {
+            KRATOS_WATCH("Abans de adddynamics")
+            KRATOS_WATCH(RHS_Contribution)
+        }
+
             //adding the dynamic contributions (statics is already included)
             AddDynamicsToLHS(LHS_Contribution, mDamp[k], mMass[k], CurrentProcessInfo);
             AddDynamicsToRHS(rCurrentElement, RHS_Contribution, mDamp[k], mMass[k], CurrentProcessInfo);
+
+        if(rCurrentElement->Id()==2453)
+        {
+            KRATOS_WATCH("Despres de adddynamics")
+            KRATOS_WATCH(RHS_Contribution)
+        }
 
             // If there is a slip condition, apply it on a rotated system of coordinates
             mRotationTool.Rotate(LHS_Contribution,RHS_Contribution,rCurrentElement->GetGeometry());
