@@ -68,6 +68,9 @@ public:
     typedef ModelPart::MeshType::GeometryType::PointsArrayType      PointsArrayType;
     typedef MeshDataTransferUtilities::TransferParameters    TransferParametersType;
 
+    typedef std::vector<Node<3>*>             NodePointerVectorType;
+    typedef std::vector<Element*>          ElementPointerVectorType;
+    typedef std::vector<Condition*>      ConditionPointerVectorType;
 
     enum ContactElementType //(contact domain definition)
     {
@@ -899,6 +902,8 @@ public:
     ///@}
     ///@name Operations
     ///@{
+
+    void SetModelPartNameToElements (ModelPart& rModelPart);
 
     void SetModelPartNameToConditions (ModelPart& rModelPart);
 
