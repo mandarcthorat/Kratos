@@ -21,7 +21,7 @@
     },
     "time_settings"            : {
         "time_step" : 0.1,
-        "end_time"  : 10.0
+        "end_time"  : 0.1
     },
     "solver_settings"          : {
         "solver_type" : "solid_mechanics_implicit_dynamic_solver",
@@ -140,7 +140,7 @@
             "output_frequency"    : 1,
             "node_output"         : true,
             "nodal_flags_results" : ["FREE_SURFACE","INLET"],
-            "nodal_results"       : ["VELOCITY","PRESSURE","NORMAL","BODY_FORCE","MESH_VELOCITY"],
+            "nodal_results"       : ["VELOCITY","PRESSURE","NORMAL","BODY_FORCE","MESH_VELOCITY","ACCELERATION"],
             "gauss_point_results" : []
         }
     }
