@@ -213,6 +213,12 @@ namespace Kratos
       return rParameter;
     }
 
+    double& GetFirstDerivativeKineticParameter(double& rParameter) override
+    {
+      rParameter = mAlpha;
+      return rParameter;
+    }
+
     double& GetSecondDerivativeInertialParameter(double& rParameter) override
     {
       rParameter = (1.0 - mAlpha) * this->mNewmark.c0;
