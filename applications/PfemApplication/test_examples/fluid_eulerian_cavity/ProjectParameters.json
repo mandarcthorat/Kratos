@@ -2,7 +2,7 @@
     "problem_data"         : {
         "problem_name"  : "cavity_2D_new_new",
         "parallel_type" : "OpenMP",
-        "echo_level"    : 0,
+        "echo_level"    : 1,
         "start_time"    : 0.0,
         "end_time"      : 10.0
     },
@@ -21,7 +21,7 @@
             "node_output"         : false,
             "skin_output"         : false,
             "plane_output"        : [],
-            "nodal_results"       : ["VELOCITY","PRESSURE"],
+            "nodal_results"       : ["VELOCITY","PRESSURE","ACCELERATION","MESH_VELOCITY"],
             "gauss_point_results" : []
         },
         "point_data_configuration"  : []

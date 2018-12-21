@@ -31,6 +31,7 @@
             "time_integration_settings":{
   	        "analysis_type": "ALE",
                 "integration_method": "Bossak",
+                "move_mesh_flag": false,
                 "integration_variables":["MESH_VELOCITY"]
             },
             "convergence_criterion_settings":{
@@ -45,8 +46,7 @@
                 "builder_type": "block_builder",
                 "compute_reactions": false,
                 "reform_dofs_at_each_step": false,
-                "max_iteration": 25,
-                "move_mesh_flag": false
+                "max_iteration": 25
             },
             "linear_solver_settings":{
                 "solver_type": "SuperLUSolver"
