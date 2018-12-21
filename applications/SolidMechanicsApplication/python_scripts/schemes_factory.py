@@ -18,6 +18,7 @@ class SolutionScheme:
            "integration_method": "Newmark",
            "time_integration_order": 1,
            "buffer_size": 2,
+           "move_mesh_flag": true,
            "integration_variables": []
         }
         """)
@@ -133,29 +134,31 @@ class SolutionScheme:
                         # TODO: move_mesh flag
                         import KratosMultiphysics.PfemApplication as KratosPfem
                         options = KratosMultiphysics.Flags()
-                        options.Set(KratosSolid.SolverLocalFlags.MOVE_MESH, False)
+                        options.Set(KratosSolid.SolverLocalFlags.MOVE_MESH, self.settings["move_mesh_flag"].GetBool())
                         solution_scheme = KratosPfem.AleDynamicScheme(vector_integration_methods,scalar_integration_methods,options)
                     else:
                         raise Exception("ALE scheme needs vector and scalar integration methods.")
                 else:
+                    options = KratosMultiphysics.Flags()
                     if(len(vector_integration_methods)):
                         if(len(scalar_integration_methods)):
-                            solution_scheme = KratosSolid.DynamicScheme(vector_integration_methods,scalar_integration_methods)
+                            solution_scheme = KratosSolid.DynamicScheme(vector_integration_methods,scalar_integration_methods,options)
                         else:
-                            solution_scheme = KratosSolid.DynamicScheme(vector_integration_methods)
+                            solution_scheme = KratosSolid.DynamicScheme(vector_integration_methods,options)
                     elif(len(scalar_integration_methods)):
-                        solution_scheme = KratosSolid.DynamicScheme(vector_integration_methods,scalar_integration_methods)
+                        solution_scheme = KratosSolid.DynamicScheme(vector_integration_methods,scalar_integration_methods,options)
                     else:
                         print("WARNING: no integration methods")
 
         elif(self.settings["solution_type"].GetString() == "Static" or self.settings["solution_type"].GetString() == "Quasi-static"):
+            options = KratosMultiphysics.Flags()
             if(len(vector_integration_methods)):
                 if(len(scalar_integration_methods)):
-                    solution_scheme = KratosSolid.StaticScheme(vector_integration_methods,scalar_integration_methods)
+                    solution_scheme = KratosSolid.StaticScheme(vector_integration_methods,scalar_integration_methods,options)
                 else:
-                    solution_scheme = KratosSolid.StaticScheme(vector_integration_methods)
+                    solution_scheme = KratosSolid.StaticScheme(vector_integration_methods,options)
             elif(len(scalar_integration_methods)):
-                solution_scheme = KratosSolid.StaticScheme(vector_integration_methods,scalar_integration_methods)
+                solution_scheme = KratosSolid.StaticScheme(vector_integration_methods,scalar_integration_methods,options)
             else:
                 print("WARNING: no integration methods")
 

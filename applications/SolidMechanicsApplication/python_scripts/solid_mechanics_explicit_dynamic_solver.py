@@ -103,11 +103,3 @@ class ExplicitMonolithicSolver(BaseSolver.MonolithicSolver):
         options.Set(KratosSolid.SolverLocalFlags.REFORM_DOFS, self.settings["solving_strategy_settings"]["reform_dofs_at_each_step"].GetBool())
 
         return KratosSolid.ExplicitStrategy(self.model_part, solution_scheme, options)
-
-
-        #return KratosSolid.ExplicitStrategy(self.model_part,
-        #                                    solution_scheme,
-        #                                    linear_solver,
-        #                                    self.settings["solving_strategy_settings"]["compute_reactions"].GetBool(),
-        #                                    self.settings["solving_strategy_settings"]["reform_dofs_at_each_step"].GetBool(),
-        #                                    self.settings["solving_strategy_settings"]["move_mesh_flag"].GetBool())

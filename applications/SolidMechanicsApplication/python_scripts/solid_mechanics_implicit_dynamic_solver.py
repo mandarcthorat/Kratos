@@ -116,7 +116,6 @@ class ImplicitMonolithicSolver(BaseSolver.MonolithicSolver):
         options.Set(KratosSolid.SolverLocalFlags.REFORM_DOFS, self.settings["solving_strategy_settings"]["reform_dofs_at_each_step"].GetBool())
         options.Set(KratosSolid.SolverLocalFlags.IMPLEX, self.settings["solving_strategy_settings"]["implex"].GetBool())
         options.Set(KratosSolid.SolverLocalFlags.UPDATE_VARIABLES, self.settings["solving_strategy_settings"]["iterative_update"].GetBool())
-        #options.Set(KratosSolid.SolverLocalFlags.MOVE_MESH, self.settings["solving_strategy_settings"]["move_mesh_flag"].GetBool())
 
         return KratosSolid.LineSearchStrategy(self.model_part, solution_scheme, builder_and_solver, convergence_criterion,
                                               options, self.settings["solving_strategy_settings"]["max_iteration"].GetInt(),
@@ -133,7 +132,6 @@ class ImplicitMonolithicSolver(BaseSolver.MonolithicSolver):
         options.Set(KratosSolid.SolverLocalFlags.REFORM_DOFS, self.settings["solving_strategy_settings"]["reform_dofs_at_each_step"].GetBool())
         options.Set(KratosSolid.SolverLocalFlags.IMPLEX, self.settings["solving_strategy_settings"]["implex"].GetBool())
         options.Set(KratosSolid.SolverLocalFlags.UPDATE_VARIABLES, self.settings["solving_strategy_settings"]["iterative_update"].GetBool())
-        #options.Set(KratosSolid.SolverLocalFlags.MOVE_MESH, self.settings["solving_strategy_settings"]["move_mesh_flag"].GetBool())
 
         return KratosSolid.NewtonRaphsonStrategy(self.model_part, solution_scheme, builder_and_solver, convergence_criterion,
                                                  options, self.settings["solving_strategy_settings"]["max_iteration"].GetInt())
