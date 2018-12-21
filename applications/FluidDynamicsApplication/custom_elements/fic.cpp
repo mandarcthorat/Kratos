@@ -336,12 +336,6 @@ void FIC<TElementData>::AddVelocitySystem(
     this->AddViscousTerm(rData,LHS,rLocalRHS);
 
     noalias(rLocalLHS) += LHS;
-        if(this->Id()==2453)
-        {
-            KRATOS_WATCH(values)
-            KRATOS_WATCH(LHS)
-            KRATOS_WATCH(rLocalLHS)
-        }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

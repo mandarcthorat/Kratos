@@ -186,7 +186,8 @@ class AleSolutionScheme : public DynamicScheme<TSparseSpace, TDenseSpace>
     this->UpdateDofs(rModelPart,rDofSet,rDx);
 
     // TODO: We must rotate and recover mesh_velocity too (modify mRotationTool methods)
-    this->UpdateMeshVelocity(rModelPart,rDx);
+    if( this->mOptions.Is(LocalFlagType::MOVE_MESH) )
+      this->UpdateMeshVelocity(rModelPart,rDx);
 
     mRotationTool.RecoverVelocities(rModelPart);
 
@@ -208,8 +209,8 @@ class AleSolutionScheme : public DynamicScheme<TSparseSpace, TDenseSpace>
   {
     KRATOS_TRY
 
-        // Updating time derivatives (nodally for efficiency)
-        const unsigned int NumThreads = OpenMPUtils::GetNumThreads();
+    // Updating time derivatives (nodally for efficiency)
+    const unsigned int NumThreads = OpenMPUtils::GetNumThreads();
     OpenMPUtils::PartitionVector NodePartition;
     OpenMPUtils::DivideInPartitions(rModelPart.Nodes().size(), NumThreads, NodePartition);
 
@@ -257,8 +258,6 @@ class AleSolutionScheme : public DynamicScheme<TSparseSpace, TDenseSpace>
   }
 
   //***************************************************************************
-
-
 
   /**
    * Performing the prediction of the solution
@@ -320,20 +319,8 @@ class AleSolutionScheme : public DynamicScheme<TSparseSpace, TDenseSpace>
       (pCurrentElement) -> CalculateMassMatrix(this->mMatrix.M[thread], rCurrentProcessInfo);
       (pCurrentElement) -> CalculateLocalVelocityContribution(rLHS_Contribution, rRHS_Contribution, rCurrentProcessInfo);
 
-        if(pCurrentElement->Id()==2453)
-        {
-            KRATOS_WATCH("Abans de adddynamics")
-            KRATOS_WATCH(rRHS_Contribution)
-        }
-
       this->AddDynamicsToLHS (rLHS_Contribution, this->mMatrix.D[thread], this->mMatrix.M[thread], rCurrentProcessInfo);
       this->AddDynamicsToRHS (pCurrentElement, rRHS_Contribution, this->mMatrix.D[thread], this->mMatrix.M[thread], rCurrentProcessInfo);
-
-        if(pCurrentElement->Id()==2453)
-        {
-            KRATOS_WATCH("Despres de adddynamics")
-            KRATOS_WATCH(rRHS_Contribution)
-        }
 
     }
 

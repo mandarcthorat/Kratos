@@ -428,21 +428,9 @@ namespace Kratos {
 
             (rCurrentElement)->EquationIdVector(EquationId, CurrentProcessInfo);
 
-        if(rCurrentElement->Id()==2453)
-        {
-            KRATOS_WATCH("Abans de adddynamics")
-            KRATOS_WATCH(RHS_Contribution)
-        }
-
             //adding the dynamic contributions (statics is already included)
             AddDynamicsToLHS(LHS_Contribution, mDamp[k], mMass[k], CurrentProcessInfo);
             AddDynamicsToRHS(rCurrentElement, RHS_Contribution, mDamp[k], mMass[k], CurrentProcessInfo);
-
-        if(rCurrentElement->Id()==2453)
-        {
-            KRATOS_WATCH("Despres de adddynamics")
-            KRATOS_WATCH(RHS_Contribution)
-        }
 
             // If there is a slip condition, apply it on a rotated system of coordinates
             mRotationTool.Rotate(LHS_Contribution,RHS_Contribution,rCurrentElement->GetGeometry());
@@ -918,7 +906,7 @@ namespace Kratos {
             // adding mass contribution to the dynamic stiffness
             if (M.size1() != 0) // if M matrix declared
             {
-                noalias(LHS_Contribution) += mam*M;
+              noalias(LHS_Contribution) += mam*M;
             }
 
             //adding  damping contribution
@@ -952,7 +940,6 @@ namespace Kratos {
                 (macc[k]) *= (1.00 - mAlphaBossak);
                 rCurrentElement->GetSecondDerivativesVector(maccold[k], 1);
                 noalias(macc[k]) += mAlphaBossak * maccold[k];
-                std::cout<<" macc "<<macc[k]<<std::endl;
                 noalias(RHS_Contribution) -= prod(M, macc[k]);
             }
         }

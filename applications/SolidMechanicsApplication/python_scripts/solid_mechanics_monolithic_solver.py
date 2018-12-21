@@ -47,6 +47,7 @@ class MonolithicSolver(object):
                 "integration_method": "Newmark",
                 "time_integration_order": 1,
                 "buffer_size": 2,
+                "move_mesh_flag": true,
                 "integration_variables":[]
             },
             "convergence_criterion_settings":{
@@ -63,7 +64,6 @@ class MonolithicSolver(object):
                 "line_search_type": 0,
                 "implex": false,
                 "compute_reactions": true,
-                "move_mesh_flag": true,
                 "iterative_update": true,
                 "clear_storage": false,
                 "reform_dofs_at_each_step": false,
@@ -72,8 +72,6 @@ class MonolithicSolver(object):
             },
             "linear_solver_settings":{
                 "solver_type": "SuperLUSolver",
-                "max_iteration": 500,
-                "tolerance": 1e-9,
                 "scaling": false,
                 "verbosity": 1
             },
@@ -411,19 +409,24 @@ class MonolithicSolver(object):
 
         scalar_dof_method_set = False
         vector_dof_method_set = False
+        method_type = None
 
         for dof in dofs:
             kratos_variable = KratosMultiphysics.KratosGlobals.GetVariable(dof)
             if( isinstance(kratos_variable,KratosMultiphysics.DoubleVariable) and (not scalar_dof_method_set) ):
-                scalar_integration_methods[dof].CalculateParameters(self.process_info)
-                scalar_dof_method_set = True
-
-                print("::[----Integration----]::",scalar_integration_methods[dof],"("+dof+")")
+                if( method_type != str(scalar_integration_methods[dof]) ):
+                    scalar_integration_methods[dof].CalculateParameters(self.process_info)
+                    scalar_dof_method_set = True
+                    print("::[----Integration----]::",scalar_integration_methods[dof],"("+dof+")")
+                    method_type = str(scalar_integration_methods[dof])
+                    print("HERE")
             if( isinstance(kratos_variable,KratosMultiphysics.Array1DVariable3) and (not vector_dof_method_set) ):
-                component_integration_methods[dof+"_X"].CalculateParameters(self.process_info)
-                vector_dof_method_set = True
-                print("::[----Integration----]::",component_integration_methods[dof+"_X"],"("+dof+")")
-
+                if( method_type !=  str(component_integration_methods[dof+"_X"]) ):
+                    component_integration_methods[dof+"_X"].CalculateParameters(self.process_info)
+                    vector_dof_method_set = True
+                    print("::[----Integration----]::",component_integration_methods[dof+"_X"],"("+dof+")")
+                    method_type = str(component_integration_methods[dof+"_X"])
+                    print("HERE2")
         return scalar_integration_methods, component_integration_methods
 
 
