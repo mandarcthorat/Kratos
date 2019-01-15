@@ -195,7 +195,7 @@ class Algorithm(object):
                 self.dem_solution.BeforePrintingOperations(self.dem_solution.time)
 
                 #### GiD IO ##########################################
-                if self.dem_solution.IsTimeToPrintPostProcess(self.dem_solution.time):
+                if self.dem_solution.IsTimeToPrintPostProcess():
                     self.dem_solution.PrintResultsForGid(self.dem_solution.time)
                     self.dem_solution.demio.PrintMultifileLists(self.dem_solution.time, self.dem_solution.post_path)
                     self.dem_solution.time_old_print = self.dem_solution.time
