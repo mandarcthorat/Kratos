@@ -134,10 +134,9 @@ void FluidElement<TElementData>::CalculateLocalSystem(MatrixType& rLeftHandSideM
         // Iterate over integration points to evaluate local contribution
         for (unsigned int g = 0; g < number_of_gauss_points; g++) {
 
-            data.UpdateGeometryValues(g, gauss_weights[g], row(shape_functions, g),
-                shape_derivatives[g]);
-
-            this->CalculateMaterialResponse(data);
+            this->UpdateIntegrationPointData(
+                data, g, gauss_weights[g],
+                row(shape_functions, g),shape_derivatives[g]);
 
             this->AddTimeIntegratedSystem(
                 data, rLeftHandSideMatrix, rRightHandSideVector);
@@ -169,10 +168,9 @@ void FluidElement<TElementData>::CalculateLeftHandSide(MatrixType& rLeftHandSide
 
         // Iterate over integration points to evaluate local contribution
         for (unsigned int g = 0; g < number_of_gauss_points; g++) {
-            data.UpdateGeometryValues(g, gauss_weights[g], row(shape_functions, g),
-                shape_derivatives[g]);
-
-            this->CalculateMaterialResponse(data);
+            this->UpdateIntegrationPointData(
+                data, g, gauss_weights[g],
+                row(shape_functions, g),shape_derivatives[g]);
 
             this->AddTimeIntegratedLHS(data, rLeftHandSideMatrix);
         }
@@ -202,10 +200,9 @@ void FluidElement<TElementData>::CalculateRightHandSide(VectorType& rRightHandSi
 
         // Iterate over integration points to evaluate local contribution
         for (unsigned int g = 0; g < number_of_gauss_points; g++) {
-            data.UpdateGeometryValues(g, gauss_weights[g], row(shape_functions, g),
-                shape_derivatives[g]);
-
-            this->CalculateMaterialResponse(data);
+            this->UpdateIntegrationPointData(
+                data, g, gauss_weights[g],
+                row(shape_functions, g),shape_derivatives[g]);
 
             this->AddTimeIntegratedRHS(data, rRightHandSideVector);
         }
@@ -241,10 +238,9 @@ void FluidElement<TElementData>::CalculateLocalVelocityContribution(
         // Iterate over integration points to evaluate local contribution
         for (unsigned int g = 0; g < number_of_gauss_points; g++) {
             const auto& r_dndx = shape_derivatives[g];
-            data.UpdateGeometryValues(
-                g, gauss_weights[g], row(shape_functions, g), r_dndx);
-
-            this->CalculateMaterialResponse(data);
+            this->UpdateIntegrationPointData(
+                data, g, gauss_weights[g],
+                row(shape_functions, g),r_dndx);
 
             this->AddVelocitySystem(data, rDampMatrix, rRightHandSideVector);
         }
@@ -275,10 +271,9 @@ void FluidElement<TElementData>::CalculateMassMatrix(MatrixType& rMassMatrix,
 
         // Iterate over integration points to evaluate local contribution
         for (unsigned int g = 0; g < number_of_gauss_points; g++) {
-            data.UpdateGeometryValues(g, gauss_weights[g], row(shape_functions, g),
-                shape_derivatives[g]);
-
-            this->CalculateMaterialResponse(data);
+            this->UpdateIntegrationPointData(
+                data, g, gauss_weights[g],
+                row(shape_functions, g),shape_derivatives[g]);
 
             this->AddMassLHS(data, rMassMatrix);
         }
@@ -571,6 +566,19 @@ double FluidElement<TElementData>::GetAtCoordinate(
     const typename TElementData::ShapeFunctionsType& rN) const
 {
     return Value;
+}
+
+template <class TElementData>
+void FluidElement<TElementData>::UpdateIntegrationPointData(
+    TElementData& rData,
+    unsigned int IntegrationPointIndex,
+    double Weight,
+    const typename TElementData::MatrixRowType& rN,
+    const typename TElementData::ShapeDerivativesType& rDN_DX) const
+{
+    rData.UpdateGeometryValues(IntegrationPointIndex, Weight, rN, rDN_DX);
+
+    this->CalculateMaterialResponse(rData);
 }
 
 template <class TElementData>
