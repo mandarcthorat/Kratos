@@ -27,10 +27,12 @@ namespace Python
 {
 
 //base types
-typedef UblasSpace<double, CompressedMatrix, Vector>                                          SparseSpaceType;
-typedef UblasSpace<double, Matrix, Vector>                                                     LocalSpaceType;
-
-
+typedef Kratos::Vector                                                                        DenseVectorType;
+typedef Kratos::Matrix                                                                        DenseMatrixType;
+typedef boost::numeric::ublas::vector<double>                                                     SparseVectorType;
+typedef boost::numeric::ublas::matrix<double>                                                     SparseMatrixType;
+typedef UblasSpace<double, CompressedMatrix, SparseVectorType>                                     SparseSpaceType;
+typedef UblasSpace<double, DenseMatrixType, DenseVectorType>                                        LocalSpaceType;
 
 void  AddCustomStrategiesToPython(pybind11::module& m)
 {
@@ -38,7 +40,7 @@ void  AddCustomStrategiesToPython(pybind11::module& m)
   namespace py = pybind11;
 
   // Solution scheme types
-  typedef DynamicScheme<SparseSpaceType, LocalSpaceType>                                    DynamicSchemeType;
+  typedef DynamicScheme<SparseSpaceType, LocalSpaceType>                                DynamicSchemeType;
   typedef AleSolutionScheme<SparseSpaceType, LocalSpaceType>                            AleSolutionSchemeType;
 
   // Time integration methods for vectors
