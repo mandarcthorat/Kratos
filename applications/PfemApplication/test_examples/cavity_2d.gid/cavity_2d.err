@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "MainKratos.py", line 3, in <module>
+    import KratosMultiphysics
+  File "/home/ipouplana/GiDx64/gid14.0.1-x64/./problemtypes/kratos.gid/exec/Kratos/KratosMultiphysics/__init__.py", line 9, in <module>
+    from Kratos import *
+ModuleNotFoundError: No module named 'Kratos'
