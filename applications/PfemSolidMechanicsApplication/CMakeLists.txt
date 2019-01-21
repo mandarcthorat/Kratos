@@ -6,6 +6,7 @@ message("**** configuring KratosPfemSolidMechanicsApplication ****")
 include(pybind11Tools)
 
 include_directories( ${CMAKE_SOURCE_DIR}/kratos )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../SolversApplication )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../SolidMechanicsApplication )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../DelaunayMeshingApplication )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../ContactMechanicsApplication )
@@ -133,7 +134,8 @@ set( KRATOS_PFEM_SOLID_MECHANICS_APPLICATION_PYTHON_INTERFACE
 )
 
 add_library(KratosPfemSolidMechanicsCore SHARED ${KRATOS_PFEM_SOLID_MECHANICS_APPLICATION_CORE})
-target_link_libraries(KratosPfemSolidMechanicsCore PUBLIC KratosCore KratosSolidMechanicsCore KratosDelaunayMeshingCore)
+target_link_libraries(KratosPfemSolidMechanicsCore PUBLIC KratosCore KratosSolidMechanicsCore KratosDelaunayMeshingCore KratosContactMechanicsCore)
+#target_link_libraries(KratosPfemSolidMechanicsCore PUBLIC KratosCore)
 set_target_properties(KratosPfemSolidMechanicsCore PROPERTIES COMPILE_DEFINITIONS "PFEM_SOLID_MECHANICS_APPLICATION=EXPORT,API")
 
 ###############################################################

@@ -1,3 +1,7 @@
+# Applications requiered
+#from KratosMultiphysics.SolversApplication import *
+#from KratosMultiphysics.ConstitutiveModelsApplication import *
+
 from KratosSolidMechanicsApplication import *
 application = KratosSolidMechanicsApplication()
 application_name = "KratosSolidMechanicsApplication"
