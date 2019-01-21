@@ -1,0 +1,47 @@
+ |  /           |             
+ ' /   __| _` | __|  _ \   __|
+ . \  |   (   | |   (   |\__ \ 
+_|\_\_|  \__,_|\__|\___/ ____/
+           Multi-Physics 6.0.0-93d4b80f9e-FullDebug
+Importing    KratosExternalSolversApplication 
+Initializing KratosExternalSolversApplication... 
+Importing    KratosDelaunayMeshingApplication 
+            ___      _                                        
+     KRATOS|   \ ___| |__ _ _  _ _ _  __ _ _  _              
+           | |) / -_| / _` | || | ' \/ _` | || |             
+           |___/\___|_\__,_|\_,_|_||_\__,_|\_, |MESHING  
+                                            |__/              
+Initializing KratosDelaunayMeshingApplication    ...          
+Importing    KratosPfemApplication 
+            ___  __                            
+     KRATOS| _ \/ _|___ _ __                   
+           |  _/  _/ -_) '  \                  
+           |_| |_| \___|_|_|_|APPLICATION      
+Initializing KratosPfemApplication    ...      
+Importing    KratosConstitutiveModelsApplication 
+            __  __      _           _      _         
+     KRATOS|  \/  |__ _| |_ ___ _ _(_)__ _| |        
+           | |\/| / _` |  _/ -_) '_| / _` | |        
+           |_|  |_\__,_|\__\___|_| |_\__,_|_|MODELS
+Initializing KratosConstitutiveModelsApplication... 
+Importing    KratosSolidMechanicsApplication 
+            ___      _ _    _          
+     KRATOS/ __| ___| (_)__| |         
+           \__ \/ _ \ | / _` |         
+           |___/\___/_|_\__,_|MECHANICS
+Initializing KratosSolidMechanicsApplication...  
+Wed Nov 21 17:54:09 2018
+ 
+::[--PFEM Simulation--]:: [OMP USING 8 THREADS]
+::[------Restart------]:: Ready
+::[--Process_Handler--]:: Process List Ready
+ Variables : ['ACCELERATION', 'DETERMINANT_F', 'DISPLACEMENT', 'MEAN_ERROR', 'NODAL_H', 'NORMAL', 'PRESSURE', 'PRESSURE_ACCELERATION', 'PRESSURE_REACTION', 'PRESSURE_VELOCITY', 'SHRINK_FACTOR', 'VELOCITY', 'VELOCITY_REACTION', 'VOLUME_ACCELERATION']
+::[---Model_Manager---]:: General Variables ADDED
+::[---Model_Manager---]:: Reading file: pfem_ale_cavity.mdpa
+::[---Model_Manager---]:: Body Created: Body_Fluid
+::[---Model_Manager---]:: Composite Solving Parts
+::[---Model_Manager---]:: Update Solving Parts
+::[---Model_Manager---]:: Model Ready (DOFs:2632)
+::[----Integration----]:: NewmarkMethod : NewmarkMethod Data (VELOCITY)
+::[----Integration----]:: BdfMethod : BdfMethod Data (PRESSURE)
+KRATOS TERMINATED WITH ERROR

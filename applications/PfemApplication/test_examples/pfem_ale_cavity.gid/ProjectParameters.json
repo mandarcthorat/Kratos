@@ -1,0 +1,147 @@
+{
+    "problem_data"             : {
+        "problem_name" : "pfem_ale_cavity",
+        "echo_level"   : 1,
+	"threads" : 1
+    },
+    "model_settings"           : {
+        "model_name"           : "pfem_ale_cavity",
+        "dimension"            : 2,
+        "input_file_settings"  : {
+            "name" : "pfem_ale_cavity"
+        },
+        "bodies_list"          : [{
+            "body_type"  : "Fluid",
+            "body_name"  : "Body_Fluid",
+            "parts_list" : ["Parts_Fluid"]
+        }],
+        "domain_parts_list"    : ["Parts_Fluid"],
+        "processes_parts_list" : ["VELOCITY_No_Slip","VELOCITY_Velocity_Top_Wall","PRESSURE_Outlet"],
+	"variables" : ["BODY_FORCE"]
+    },
+    "time_settings"            : {
+        "time_step" : 0.1,
+        "end_time"  : 10.0
+    },
+    "solver_settings"          : {
+        "solver_type" : "solid_mechanics_implicit_dynamic_solver",
+        "Parameters"  : {
+            "time_integration_settings":{
+  	        "analysis_type": "ALE",
+                "integration_method": "Bossak",
+                "move_mesh_flag": false,
+                "integration_variables":["MESH_VELOCITY"]
+            },
+            "convergence_criterion_settings":{
+                "convergence_criterion": "Variable_criterion",
+                "variable_relative_tolerance": 0.001,
+                "variable_absolute_tolerance": 1.0e-5,
+                "residual_relative_tolerance": 0.001,
+                "residual_absolute_tolerance": 1.0e-5,
+                "separate_dofs": true
+            },
+            "solving_strategy_settings":{
+                "builder_type": "block_builder",
+                "compute_reactions": false,
+                "reform_dofs_at_each_step": false,
+                "max_iteration": 15
+            },
+            "linear_solver_settings":{
+                "solver_type": "SuperLUSolver"
+            },
+            "dofs"               : ["VELOCITY","PRESSURE"]
+        }
+    },
+    "problem_process_list"     : [{
+        "help"          : "This process applies meshing to the problem domains",
+        "kratos_module" : "KratosMultiphysics.PfemApplication",
+        "python_module" : "remesh_fluid_domains_process",
+        "process_name"  : "RemeshFluidDomainsProcess",
+        "Parameters"    : {
+            "model_part_name"       : "pfem_ale_cavity",
+            "meshing_control_type"  : "step",
+            "meshing_frequency"     : 1.0,
+            "meshing_before_output" : true,
+            "meshing_domains"       : []
+        }
+    }],
+    "constraints_process_list" : [{
+        "python_module" : "assign_vector_components_to_nodes_process",
+        "kratos_module" : "KratosMultiphysics.SolidMechanicsApplication",
+        "help"          : "This process fixes the selected components of a given vector variable",
+        "process_name"  : "AssignVectorComponentsToNodesProcess",
+        "Parameters"    : {
+            "model_part_name"     : "VELOCITY_No_Slip",
+            "variable_name"       : "VELOCITY",
+            "value"               : [0.0,0.0,0.0],
+            "compound_assignment" : "direct",
+            "interval"            : [0.0,"End"]
+        }
+    },{
+        "python_module" : "assign_vector_components_to_nodes_process",
+        "kratos_module" : "KratosMultiphysics.SolidMechanicsApplication",
+        "help"          : "This process fixes the selected components of a given vector variable",
+        "process_name"  : "AssignVectorComponentsToNodesProcess",
+        "Parameters"    : {
+            "model_part_name"     : "VELOCITY_Velocity_Top_Wall",
+            "variable_name"       : "VELOCITY",
+            "value"               : [1.0,0.0,0.0],
+            "compound_assignment" : "direct",
+            "interval"            : [-0.1,"End"]
+        }
+    },{
+        "python_module" : "assign_scalar_to_nodes_process",
+        "kratos_module" : "KratosMultiphysics.SolidMechanicsApplication",
+        "help"          : "This process fixes the given scalar variable",
+        "process_name"  : "AssignScalarToNodesProcess",
+        "Parameters"    : {
+            "model_part_name"     : "PRESSURE_Outlet",
+            "variable_name"       : "PRESSURE",
+            "value"               : 0.0,
+            "compound_assignment" : "direct",
+            "interval"            : [0.0,"End"]
+        }
+    }],
+    "loads_process_list"       : [{
+        "python_module" : "assign_vector_components_to_nodes_process",
+        "kratos_module" : "KratosMultiphysics.SolidMechanicsApplication",
+        "Parameters"    : {
+            "model_part_name" : "Body_Fluid",
+            "variable_name"   : "BODY_FORCE",
+            "value"           : [0.0,0.0,0.0],
+            "constrained"     : false
+        }
+    }],
+    "output_process_list"      : [{
+        "python_module" : "restart_process",
+        "kratos_module" : "KratosMultiphysics.SolidMechanicsApplication",
+        "help"          : "This process writes restart files",
+        "process_name"  : "RestartProcess",
+        "Parameters"    : {
+            "model_part_name"     : "pfem_ale_cavity",
+            "save_restart"        : false,
+            "restart_file_name"   : "pfem_ale_cavity",
+            "restart_file_label"  : "step",
+            "output_control_type" : "step",
+            "output_frequency"    : 1,
+            "json_output"         : false
+        }
+    }],
+    "output_configuration"     : {
+        "result_file_configuration" : {
+            "gidpost_flags"       : {
+                "GiDPostMode"           : "GiD_PostBinary",
+                "WriteDeformedMeshFlag" : "WriteDeformed",
+                "WriteConditionsFlag"   : "WriteConditions",
+                "MultiFileFlag"         : "MultipleFiles"
+            },
+            "file_label"          : "step",
+            "output_control_type" : "step",
+            "output_frequency"    : 1,
+            "node_output"         : true,
+            "nodal_flags_results" : ["FREE_SURFACE","INLET"],
+            "nodal_results"       : ["VELOCITY","PRESSURE","NORMAL","BODY_FORCE","MESH_VELOCITY","DISPLACEMENT","ACCELERATION"],
+            "gauss_point_results" : []
+        }
+    }
+}

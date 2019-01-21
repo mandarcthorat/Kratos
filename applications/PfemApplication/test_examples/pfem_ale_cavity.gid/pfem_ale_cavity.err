@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "MainKratos.py", line 9, in <module>
+    MainPfem.PfemSolution(KratosMultiphysics.Model()).Run()
+  File "/home/ipouplana/Kratos/applications/SolidMechanicsApplication/python_scripts/MainSolid.py", line 56, in Run
+    self.Initialize()
+  File "/home/ipouplana/Kratos/applications/SolidMechanicsApplication/python_scripts/MainSolid.py", line 88, in Initialize
+    self._import_materials()
+  File "/home/ipouplana/Kratos/applications/SolidMechanicsApplication/python_scripts/MainSolid.py", line 366, in _import_materials
+    assign_materials_processes = process_factory.KratosProcessFactory(domain_model).ConstructListOfProcesses(MaterialParameters["material_models_list"])
+  File "/home/ipouplana/Kratos/kratos/python_scripts/process_factory.py", line 18, in ConstructListOfProcesses
+    p = python_module.Factory(item, self.Model)
+  File "/home/ipouplana/Kratos/applications/ConstitutiveModelsApplication/python_scripts/assign_materials_process.py", line 8, in Factory
+    return AssignMaterialsProcess(Model, custom_settings["Parameters"])
+  File "/home/ipouplana/Kratos/applications/ConstitutiveModelsApplication/python_scripts/assign_materials_process.py", line 101, in __init__
+    self.material_law = self._GetLawFromModule(self.settings["constitutive_law"]["name"].GetString())
+  File "/home/ipouplana/Kratos/applications/ConstitutiveModelsApplication/python_scripts/assign_materials_process.py", line 169, in _GetLawFromModule
+    return eval(material_law)
+  File "<string>", line 1, in <module>
+AttributeError: module 'KratosMultiphysics.ConstitutiveModelsApplication' has no attribute 'NewtonianPlaneStrain2DLaw'
