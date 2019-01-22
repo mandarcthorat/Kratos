@@ -110,51 +110,6 @@ void PlasticityIsotropicKinematicJ2::InitializeMaterial(
 /***********************************************************************************/
 /***********************************************************************************/
 
-void PlasticityIsotropicKinematicJ2::FinalizeSolutionStep(
-    const Properties&   rMaterialProperties,
-    const GeometryType& rElementGeometry,
-    const Vector&       rShapeFunctionsValues,
-    const ProcessInfo&  rCurrentProcessInfo)
-{
-}
-
-/***********************************************************************************/
-/***********************************************************************************/
-
-void PlasticityIsotropicKinematicJ2::InitializeMaterialResponsePK1(ConstitutiveLaw::Parameters& rValues)
-{
-    InitializeMaterialResponseCauchy(rValues);
-}
-
-/***********************************************************************************/
-/***********************************************************************************/
-
-void PlasticityIsotropicKinematicJ2::InitializeMaterialResponsePK2(ConstitutiveLaw::Parameters& rValues)
-{
-    InitializeMaterialResponseCauchy(rValues);
-}
-
-/***********************************************************************************/
-/***********************************************************************************/
-
-void PlasticityIsotropicKinematicJ2::InitializeMaterialResponseKirchhoff(ConstitutiveLaw::Parameters& rValues)
-{
-    InitializeMaterialResponseCauchy(rValues);
-}
-
-/***********************************************************************************/
-/***********************************************************************************/
-
-void PlasticityIsotropicKinematicJ2::InitializeMaterialResponseCauchy(ConstitutiveLaw::Parameters& rValues)
-{
-    // Initializations (if any) at each time step
-
-    // NOTHING DONE HERE
-}
-
-/***********************************************************************************/
-/***********************************************************************************/
-
 void PlasticityIsotropicKinematicJ2::CalculateMaterialResponsePK1(ConstitutiveLaw::Parameters& rValues)
 {
     CalculateMaterialResponseCauchy(rValues); //PK1 not yet implemented

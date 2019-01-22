@@ -171,52 +171,10 @@ public:
      * @param rMaterialProperties the Properties instance of the current element
      * @param rElementGeometry the geometry of the current element
      * @param rShapeFunctionsValues the shape functions values in the current integration point
-     * @warning This function is deprecated.
      */
     void InitializeMaterial(const Properties& rMaterialProperties,
                             const GeometryType& rElementGeometry,
                             const Vector& rShapeFunctionsValues) override;
-
-    /**
-     * @brief To be called at the end of each solution step  (e.g. from Element::FinalizeSolutionStep)
-     * @param rMaterialProperties the Properties instance of the current element
-     * @param rElementGeometry the geometry of the current element
-     * @param rShapeFunctionsValues the shape functions values in the current integration point
-     * @param rCurrentProcessInfo the current ProcessInfo instance
-     * @warning This function is deprecated.
-     */
-    void FinalizeSolutionStep(const Properties& rMaterialProperties,
-                            const GeometryType& rElementGeometry,
-                            const Vector& rShapeFunctionsValues,
-                            const ProcessInfo& rCurrentProcessInfo) override;
-
-    /**
-     * @brief Initializes the material response in terms of 1st Piola-Kirchhoff stresses
-     * @param rValues The specific parameters of the current constitutive law
-     * @see Parameters
-     */
-    void InitializeMaterialResponsePK1(ConstitutiveLaw::Parameters& rValues) override;
-
-    /**
-     * @brief Initializes the material response in terms of 2nd Piola-Kirchhoff stresses
-     * @param rValues The specific parameters of the current constitutive law
-     * @see Parameters
-     */
-    void InitializeMaterialResponsePK2(ConstitutiveLaw::Parameters& rValues) override;
-
-    /**
-     * @brief Initializes the material response in terms of Kirchhoff stresses
-     * @param rValues The specific parameters of the current constitutive law
-     * @see Parameters
-     */
-    void InitializeMaterialResponseKirchhoff(ConstitutiveLaw::Parameters& rValues) override;
-
-    /**
-     * @brief Initializes the material response in terms of Cauchy stresses
-     * @param rValues The specific parameters of the current constitutive law
-     * @see Parameters
-     */
-    void InitializeMaterialResponseCauchy(ConstitutiveLaw::Parameters& rValues) override;
 
     /**
      * @brief Computes the material response in terms of 1st Piola-Kirchhoff stresses and constitutive tensor
