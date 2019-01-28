@@ -131,6 +131,9 @@ public:
      */
     QSVMS(IndexType NewId, GeometryType::Pointer pGeometry, Properties::Pointer pProperties);
 
+    /// Copy constructor.
+    QSVMS(QSVMS const& rOther);
+
     /// Destructor.
     ~QSVMS() override;
 
@@ -168,6 +171,26 @@ public:
                             GeometryType::Pointer pGeom,
                             Properties::Pointer pProperties) const override;
 
+
+    /**
+     * clones the selected element variables, creating a new one
+     * @param NewId: the ID of the new element
+     * @param ThisNodes: the nodes of the new element
+     * @param pProperties: the properties assigned to the new element
+     * @return a Pointer to the new element
+     */
+    Element::Pointer Clone( IndexType NewId, NodesArrayType const& rThisNodes ) const override
+    {
+        QSVMS NewElement( NewId, this->GetGeometry().Create( rThisNodes ), this->pGetProperties() );
+
+        NewElement.SetData(this->GetData());
+        NewElement.SetFlags(this->GetFlags());
+
+        if(this->mpConstitutiveLaw != nullptr)
+            NewElement.mpConstitutiveLaw = this->mpConstitutiveLaw->Clone();
+
+        return Kratos::make_shared< QSVMS >(NewElement);
+    }
 
     void Calculate(
         const Variable<double>& rVariable,
@@ -417,9 +440,6 @@ private:
 
     /// Assignment operator.
     QSVMS& operator=(QSVMS const& rOther);
-
-    /// Copy constructor.
-    QSVMS(QSVMS const& rOther);
 
     ///@}
 

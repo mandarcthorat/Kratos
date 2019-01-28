@@ -186,7 +186,7 @@ class AleSolutionScheme : public DynamicScheme<TSparseSpace, TDenseSpace>
     this->UpdateDofs(rModelPart,rDofSet,rDx);
 
     // TODO: We must rotate and recover mesh_velocity too (modify mRotationTool methods)
-    if( this->mOptions.Is(LocalFlagType::MOVE_MESH) )
+    // if( this->mOptions.Is(LocalFlagType::MOVE_MESH) )
       this->UpdateMeshVelocity(rModelPart,rDx);
 
     mRotationTool.RecoverVelocities(rModelPart);

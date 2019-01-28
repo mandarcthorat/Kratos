@@ -47,6 +47,11 @@ QSVMS<TElementData>::QSVMS(IndexType NewId, GeometryType::Pointer pGeometry, Pro
     FluidElement<TElementData>(NewId,pGeometry,pProperties)
 {}
 
+// Copy Constructor
+template< class TElementData >
+QSVMS<TElementData>::QSVMS(QSVMS const& rOther)
+    :FluidElement<TElementData>(rOther)
+{}
 
 template< class TElementData >
 QSVMS<TElementData>::~QSVMS()

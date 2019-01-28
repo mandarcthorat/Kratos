@@ -93,6 +93,7 @@ class ImplicitMonolithicSolver(BaseSolver.MonolithicSolver):
         if(self.settings["time_integration_settings"]["analysis_type"].GetString() == "ALE"):
             import KratosMultiphysics.FluidDynamicsApplication as KratosCFD
             self.process_info[KratosCFD.FIC_BETA] = 0.8
+            self.process_info[KratosMultiphysics.DYNAMIC_TAU] = 1.0 # Maybe this is too much
             self.process_info[KratosMultiphysics.OSS_SWITCH] = 0
 
     def _create_mechanical_solver(self):
