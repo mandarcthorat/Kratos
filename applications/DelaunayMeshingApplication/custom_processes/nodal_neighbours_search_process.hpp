@@ -428,7 +428,6 @@ class NodalNeighboursSearchProcess
 
     //POINTS SURROUNDING A POINT
     unsigned int nodeID=0;
-    unsigned int iel=0;
     unsigned int ipn=0;
     unsigned int rpn=0;
 
@@ -442,8 +441,6 @@ class NodalNeighboursSearchProcess
 
       for(auto& i_nelem : nElements)
       {
-        iel = i_nelem.Id();
-
         Element::GeometryType& rGeometry = i_nelem.GetGeometry();
 
         for (unsigned int nd=0; nd<rGeometry.size(); ++nd)
