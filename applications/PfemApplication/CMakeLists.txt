@@ -14,11 +14,11 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../DelaunayMeshingApplication )
 ## to avoid problems with the define linkage block. By default we will compile the lib
 
 if(NOT (${DELAUNAY_MESHING_APPLICATION} MATCHES "ON"))
-    message(SEND_ERROR "The Delaunay Meshing Application must be compiled before this one. Set DELAUNAY_MESHING_APPLICATION=ON in the configure file.")
+  message(SEND_ERROR "The Delaunay Meshing Application must be compiled before this one. Set DELAUNAY_MESHING_APPLICATION=ON in the configure file.")
 endif(NOT (${DELAUNAY_MESHING_APPLICATION} MATCHES "ON"))
 
 if(NOT (${SOLID_MECHANICS_APPLICATION} MATCHES "ON"))
-    message(SEND_ERROR "The Solid Mechanics Application must be compiled before this one. Set SOLID_MECHANICS_APPLICATION=ON in the configure file.")
+  message(SEND_ERROR "The Solid Mechanics Application must be compiled before this one. Set SOLID_MECHANICS_APPLICATION=ON in the configure file.")
 endif(NOT (${SOLID_MECHANICS_APPLICATION} MATCHES "ON"))
 
 if(NOT DEFINED ${INCLUDE_TRIANGLE})

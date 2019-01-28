@@ -36,12 +36,9 @@ namespace py = pybind11;
 void AddCustomLinearSolversToPython(pybind11::module& m)
 {
   //base types
-  // typedef DenseVector<double>                                                DenseVectorType;
-  // typedef DenseMatrix<double>                                                DenseMatrixType;
   typedef Kratos::Vector                                                     DenseVectorType;
   typedef Kratos::Matrix                                                     DenseMatrixType;
   typedef boost::numeric::ublas::vector<double>                             SparseVectorType;
-  typedef boost::numeric::ublas::matrix<double>                             SparseMatrixType;
   typedef UblasSpace<double, CompressedMatrix, SparseVectorType>             SparseSpaceType;
   typedef UblasSpace<double, DenseMatrixType, DenseVectorType>                LocalSpaceType;
   typedef DirectSolver<SparseSpaceType, LocalSpaceType>                     DirectSolverType;
@@ -50,21 +47,21 @@ void AddCustomLinearSolversToPython(pybind11::module& m)
   typedef SuperLUmtDirectSolver<SparseSpaceType, LocalSpaceType>   SuperLUmtDirectSolverType;
 
   py::class_<SuperLUmtDirectSolverType, typename SuperLUmtDirectSolverType::Pointer, DirectSolverType>
-      (m, "SuperLU_DirectSolver")
+      (m, "superlu_direct")
       .def(py::init<>() )
       .def(py::init<Parameters>());
 #else
   typedef SuperLUDirectSolver<SparseSpaceType, LocalSpaceType>       SuperLUDirectSolverType;
 
   py::class_<SuperLUDirectSolverType, typename SuperLUDirectSolverType::Pointer, DirectSolverType>
-      (m, "SuperLU_DirectSolver")
+      (m, "superlu_direct")
       .def(py::init<>() )
       .def(py::init<Parameters>());
 
   //typedef SuperLUIterativeSolver<SparseSpaceType, LocalSpaceType> SuperLUIterativeSolverType;
 
   // py::class_<SuperLUIterativeSolverType, typename SuperLUIterativeSolverType::Pointer, SuperLUDirectSolverType>
-  //     (m, "SuperLU_IterativeSolver")
+  //     (m, "superlu_iterative")
   //     .def(py::init<>() )
   //     .def(py::init<Parameters>());
 #endif
@@ -79,7 +76,7 @@ void AddCustomLinearSolversToPython(pybind11::module& m)
   typedef LinearSolver<ComplexSparseSpaceType, ComplexLocalSpaceType>                 ComplexLinearSolverType;
 
   py::class_<FEASTEigenValueSolverType, FEASTEigenValueSolverType::Pointer, LinearSolverType>
-      (m, "FEAST_EigenValueSolver")
+      (m, "feast_eigen")
       .def(py::init<Parameters>() )
       .def(py::init<Parameters, ComplexLinearSolverType::Pointer>() )
       ;

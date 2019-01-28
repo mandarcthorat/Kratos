@@ -425,11 +425,11 @@ class SolutionScheme : public Flags
 
    if( mOptions.Is(LocalFlagType::INCREMENTAL_SOLUTION) ){
      //AddSolution(rModelPart,rDofSet,rDx);  //dof = incremental variable
-     mpDofUpdater->AddSolution(rDofSet,rDx);
+     mpDofUpdater->UpdateDofs(rDofSet,rDx);
    }
    else{
      //SetSolution(rModelPart,rDofSet,rDx);  //dof = total variable
-     mpDofUpdater->SetSolution(rDofSet,rDx);
+     mpDofUpdater->AssignDofs(rDofSet,rDx);
    }
 
     KRATOS_CATCH("")
@@ -556,7 +556,7 @@ class SolutionScheme : public Flags
 
       if (rModelPart.NodesBegin()->SolutionStepsDataHas(MoveMeshVariable) == false)
       {
-        KRATOS_ERROR << "It is impossible to move the mesh since the "<<MoveMeshVariableName<<" variable is not in the Model Part. Add DISPLACEMENT to the list of variables" << std::endl;
+        KRATOS_ERROR << "It is impossible to move the mesh since the "<<MoveMeshVariableName<<" variable is not in the Model Part. Add "<<MoveMeshVariableName<<" to the list of variables"<< std::endl;
       }
 
       bool VariableIntegration = false;

@@ -69,12 +69,9 @@ class KratosSolversApplication : public KratosApplication {
   /// Pointer definition of KratosSolversApplication
   KRATOS_CLASS_POINTER_DEFINITION(KratosSolversApplication);
 
-  // typedef DenseVector<double>                                                DenseVectorType;
-  // typedef DenseMatrix<double>                                                DenseMatrixType;
   typedef Kratos::Vector                                                     DenseVectorType;
   typedef Kratos::Matrix                                                     DenseMatrixType;
   typedef boost::numeric::ublas::vector<double>                             SparseVectorType;
-  typedef boost::numeric::ublas::matrix<double>                             SparseMatrixType;
   typedef UblasSpace<double, CompressedMatrix, SparseVectorType>             SparseSpaceType;
   typedef UblasSpace<double, DenseMatrixType, DenseVectorType>                LocalSpaceType;
   typedef LinearSolver<SparseSpaceType, LocalSpaceType>                     LinearSolverType;
@@ -175,8 +172,8 @@ class KratosSolversApplication : public KratosApplication {
   const StandardLinearSolverFactory<SparseSpaceType, LocalSpaceType, SuperLUmtDirectSolverType> mSuperLUmtDirectSolverFactory;
 #else
   typedef SuperLUDirectSolver<SparseSpaceType, LocalSpaceType>       SuperLUDirectSolverType;
-  //typedef SuperLUIterativeSolver<SparseSpaceType, LocalSpaceType> SuperLUIterativeSolverType;
   const StandardLinearSolverFactory<SparseSpaceType, LocalSpaceType, SuperLUDirectSolverType> mSuperLUDirectSolverFactory;
+  //typedef SuperLUIterativeSolver<SparseSpaceType, LocalSpaceType> SuperLUIterativeSolverType;
   //const StandardLinearSolverFactory<SparseSpaceType, LocalSpaceType, SuperLUIterativeSolverType> mSuperLUIterativeSolverFactory;
 #endif
 

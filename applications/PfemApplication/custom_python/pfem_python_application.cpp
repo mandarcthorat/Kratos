@@ -16,7 +16,6 @@
 #include "custom_python/add_custom_processes_to_python.h"
 #include "custom_python/add_custom_strategies_to_python.h"
 
-
 #include "pfem_application.h"
 
 namespace Kratos

@@ -42,7 +42,7 @@ class MonolithicSolver(object):
             "dofs": [],
             "time_integration_settings":{
                 "solution_type": "Dynamic",
-  	            "analysis_type": "Non-linear",
+                "analysis_type": "Non-linear",
                 "time_integration": "Implicit",
                 "integration_method": "Newmark",
                 "time_integration_order": 1,
@@ -72,7 +72,7 @@ class MonolithicSolver(object):
                 "max_iteration": 10
             },
             "linear_solver_settings":{
-                "solver_type": "SuperLU_DirectSolver",
+                "solver_type": "superlu_direct",
                 "max_iteration": 500,
                 "tolerance": 1e-9,
                 "scaling": false
@@ -148,7 +148,6 @@ class MonolithicSolver(object):
     def Clear(self):
         if self.settings["solving_strategy_settings"]["clear_storage"].GetBool():
             self._get_mechanical_solver().Clear()
-        self._check_reform_dofs()
 
     def Check(self):
         self._get_mechanical_solver().Check()
@@ -158,12 +157,14 @@ class MonolithicSolver(object):
 
     def Solve(self):
         self.Clear()
+        self._check_reform_dofs()
         return self._get_mechanical_solver().Solve()
 
     # step by step:
 
     def InitializeSolutionStep(self):
         self.Clear()
+        self._check_reform_dofs()
         self._get_mechanical_solver().InitializeSolutionStep()
 
     def SolveSolutionStep(self):
@@ -192,7 +193,7 @@ class MonolithicSolver(object):
         update_time = False
         if not self._is_not_restarted():
             if self.process_info.Has(KratosSolver.RESTART_STEP_TIME):
-                update_time = self._check_current_time_step(self.process_info[KratosSolver.RESTART_STEP_TIME])
+                update_time = self._check_previous_time_step(self.process_info[KratosSolver.RESTART_STEP_TIME])
 
         if not update_time and self.process_info.Has(KratosSolver.MESHING_STEP_TIME):
             update_time = self._check_previous_time_step(self.process_info[KratosSolver.MESHING_STEP_TIME])
@@ -336,15 +337,12 @@ class MonolithicSolver(object):
         return convergence_criterion.GetConvergenceCriterion()
 
     def _create_linear_solver(self):
-        # old linear solver factory
-        #import linear_solver_factory
-        #linear_solver = linear_solver_factory.ConstructSolver(self.settings["linear_solver_settings"])
-        #return linear_solver
         linear_solver_settings = self.settings["linear_solver_settings"]
-        if KratosMultiphysics.ComplexLinearSolverFactory().Has(linear_solver_settings["solver_type"].GetString()):
-            return KratosMultiphysics.ComplexLinearSolverFactory().Create(linear_solver_settings)
+        if linear_solver_settings.Has("solver_type"):
+            from KratosMultiphysics import python_linear_solver_factory as linear_solver_factory
+            return linear_solver_factory.ConstructSolver(linear_solver_settings)
         else:
-            return KratosMultiphysics.LinearSolverFactory().Create(linear_solver_settings)
+            raise Exception("Linear-Solver not defined")
 
     def _create_builder_and_solver(self):
         linear_solver = self._get_linear_solver()
