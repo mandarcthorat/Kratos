@@ -12,8 +12,8 @@
                 "name" : "KratosMultiphysics.FluidDynamicsApplication.Newtonian2DLaw"
             },
             "variables"        : {
-                "DENSITY"           : 1.0,
-                "DYNAMIC_VISCOSITY" : 0.01,
+                "DENSITY"           : 1000.0,
+                "DYNAMIC_VISCOSITY" : 0.001,
                 "BULK_MODULUS"      : 2200000000.0
             },
             "tables"           : {}

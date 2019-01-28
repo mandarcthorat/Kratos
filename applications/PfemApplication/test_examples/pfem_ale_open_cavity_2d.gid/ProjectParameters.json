@@ -21,11 +21,11 @@
         }],
         "domain_parts_list"    : ["Parts_Fluid","Parts_Wall"],
         "processes_parts_list" : ["VELOCITY_Velocity_zero","PRESSURE_Outlet"],
-        "variables" : ["BODY_FORCE"]
+        "variables" : ["BODY_FORCE","ADVPROJ","DIVPROJ","NODAL_AREA"]
     },
     "time_settings"            : {
-        "time_step" : 0.01,
-        "end_time"  : 10.0
+        "time_step" : 0.001,
+        "end_time"  : 0.5
     },
     "solver_settings"          : {
         "solver_type" : "solid_mechanics_implicit_dynamic_solver",
@@ -33,7 +33,7 @@
             "time_integration_settings":{
   	        "analysis_type": "ALE",
                 "integration_method": "Bossak",
-                "move_mesh_flag": false,
+                "move_mesh_flag": true,
                 "integration_variables":["MESH_VELOCITY"]
             },
             "convergence_criterion_settings":{
@@ -163,7 +163,7 @@
         "kratos_module" : "KratosMultiphysics.SolidMechanicsApplication",
         "Parameters"    : {
             "model_part_name" : "Body0",
-            "variable_name"   : "VOLUME_ACCELERATION",
+            "variable_name"   : "BODY_FORCE",
             "value"           : [0.0,-9.81,0.0],
             "constrained"     : false
         }

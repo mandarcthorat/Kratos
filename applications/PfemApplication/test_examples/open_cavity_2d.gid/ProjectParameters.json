@@ -4,7 +4,7 @@
         "parallel_type" : "OpenMP",
         "echo_level"    : 0,
         "start_time"    : 0.0,
-        "end_time"      : 10.0
+        "end_time"      : 0.5
     },
     "output_processes" : {
         "gid_output" : [{
@@ -66,7 +66,7 @@
             "input_type"     : "mdpa",
             "input_filename" : "open_cavity_2d"
         },
-        "echo_level"                  : 0,
+        "echo_level"                  : 1,
         "compute_reactions"           : false,
         "maximum_iterations"          : 10,
         "relative_velocity_tolerance" : 0.001,
@@ -78,14 +78,16 @@
         "no_skin_parts"               : [],
         "time_stepping"               : {
             "automatic_time_step" : false,
-            "time_step"           : 0.1
+            "time_step"           : 0.001
         },
         "move_mesh_flag": false,
         "linear_solver_settings"        : {
             "solver_type" : "SkylineLUFactorizationSolver"
         },
         "formulation"                 : {
-            "element_type"             : "fic"
+            "element_type"             : "qsvms",
+            "use_orthogonal_subscales": false,
+            "dynamic_tau": 1.0
         }
     },
     "processes"        : {
