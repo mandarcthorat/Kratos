@@ -184,9 +184,9 @@ namespace Kratos {
     }
 
     void DEM_D_Hertz_dependent_friction::DamageContactWithFEM(SphericParticle* const element, Condition* const wall, double& effective_radius, const double equiv_level_of_fouling, const double equiv_young, const double equiv_shear, double& indentation, const double normal_contact_force) {
-        effective_radius = 2.0 * equiv_level_of_fouling * effective_radius;
+        effective_radius = equiv_level_of_fouling * effective_radius;
         //Get new Equivalent Radius
-        double effective_radius_new = 2.0 * (equiv_young * sqrt(6 * normal_contact_force)) / (pow(Globals::Pi * element->GetParticleMaxStress(),1.5));
+        double effective_radius_new = (equiv_young * sqrt(6 * normal_contact_force)) / (pow(Globals::Pi * element->GetParticleMaxStress(),1.5));
 
         double offset = 0.0;
         if (effective_radius_new > effective_radius) {
