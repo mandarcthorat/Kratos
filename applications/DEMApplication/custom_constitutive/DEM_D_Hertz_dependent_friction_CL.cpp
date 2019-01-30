@@ -82,7 +82,7 @@ namespace Kratos {
         const double radius_sum_inv = 1.0 / radius_sum;
         double equiv_radius         = my_radius * other_radius * radius_sum_inv;
 
-        double elastic_indentation = 0.0;
+        double elastic_indentation = indentation;
 
         for (unsigned int i = 0; element1->mNeighbourElements.size(); i++) {
             if (element1->mNeighbourElements[i]->Id() == element2->Id()) {
@@ -229,7 +229,7 @@ namespace Kratos {
         //Get effective Radius
         double effective_radius    = element->GetParticleContactRadius();
 
-        double elastic_indentation = 0.0;
+        double elastic_indentation = indentation;
 
         for (unsigned int i = 0; element->mNeighbourRigidFaces.size(); i++) {
             if (element->mNeighbourRigidFaces[i]->Id() == wall->Id()) {
@@ -242,7 +242,7 @@ namespace Kratos {
             }
         }
 
-        if (indentation > 0.0) {
+        if (elastic_indentation > 0.0) {
             //Get equivalent Young's Modulus
             const double my_young            = element->GetYoung();
             const double walls_young         = wall->GetProperties()[YOUNG_MODULUS];
