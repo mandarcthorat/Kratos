@@ -44,14 +44,15 @@ namespace Kratos {
             offset = (equiv_radius_new - equiv_radius) * AlphaFunction;
 
             equiv_radius = equiv_radius_new;
+        }
 
-            for (unsigned int i = 0; element1->mNeighbourElements.size(); i++) {
-                if (element1->mNeighbourElements[i]->Id() == element2->Id()) {
-                    element1->mNeighbourContactRadius[i] = equiv_radius;
-                    if (indentation > offset) element1->mNeighbourIndentation[i] = indentation - offset;
-                    else element1->mNeighbourIndentation[i] = 0.0;
-                    break;
-                }
+        for (unsigned int i = 0; element1->mNeighbourElements.size(); i++) {
+            if (element1->mNeighbourElements[i]->Id() == element2->Id()) {
+                element1->mNeighbourContactRadius[i] = equiv_radius;
+                if (indentation > offset) element1->mNeighbourIndentation[i] = indentation - offset;
+                else element1->mNeighbourIndentation[i] = 0.0;
+                indentation = element1->mNeighbourIndentation[i];
+                break;
             }
         }
 
@@ -81,18 +82,20 @@ namespace Kratos {
         const double radius_sum_inv = 1.0 / radius_sum;
         double equiv_radius         = my_radius * other_radius * radius_sum_inv;
 
+        double elastic_indentation = 0.0;
+
         for (unsigned int i = 0; element1->mNeighbourElements.size(); i++) {
             if (element1->mNeighbourElements[i]->Id() == element2->Id()) {
                 if (element1->mNeighbourContactRadius[i] > equiv_radius) {
                     equiv_radius = element1->mNeighbourContactRadius[i];
-                    indentation = element1->mNeighbourIndentation[i] + (indentation - previous_indentation);
-                    if (indentation < 0.0) element1->mNeighbourIndentation[i] = indentation = 0.0;
+                    elastic_indentation = element1->mNeighbourIndentation[i] + (indentation - previous_indentation);
+                    if (elastic_indentation < 0.0) element1->mNeighbourIndentation[i] = elastic_indentation = 0.0;
                 }
                 break;
             }
         }
 
-        if (indentation > 0.0) {
+        if (elastic_indentation > 0.0) {
             //Get equivalent Young's Modulus
             const double my_young        = element1->GetYoung();
             const double other_young     = element2->GetYoung();
@@ -108,17 +111,17 @@ namespace Kratos {
             //Level of fouling in case it is considered
             const double equiv_level_of_fouling = 0.5 * ((1.0 + element1->GetLevelOfFouling()) + (1.0 + element2->GetLevelOfFouling()));
 
-            InitializeDependentContact(equiv_radius, equiv_level_of_fouling, equiv_young, equiv_shear, indentation);
+            InitializeDependentContact(equiv_radius, equiv_level_of_fouling, equiv_young, equiv_shear, elastic_indentation);
 
-            LocalElasticContactForce[2] = CalculateNormalForce(indentation);
-            cohesive_force              = CalculateCohesiveNormalForce(element1, element2, indentation);
+            LocalElasticContactForce[2] = CalculateNormalForce(elastic_indentation);
+            cohesive_force              = CalculateCohesiveNormalForce(element1, element2, elastic_indentation);
 
-            double contact_stress = (3 * LocalElasticContactForce[2]) / (2 * Globals::Pi * equiv_level_of_fouling * equiv_radius * indentation);
+            double contact_stress = (3 * LocalElasticContactForce[2]) / (2 * Globals::Pi * equiv_level_of_fouling * equiv_radius * elastic_indentation);
 
             if (contact_stress > element1->GetParticleMaxStress()) {
-                DamageContact(element1, element2, equiv_radius, equiv_level_of_fouling, equiv_young, equiv_shear, indentation, LocalElasticContactForce[2]);
-                LocalElasticContactForce[2] = CalculateNormalForce(indentation);
-                cohesive_force              = CalculateCohesiveNormalForce(element1, element2, indentation);
+                DamageContact(element1, element2, equiv_radius, equiv_level_of_fouling, equiv_young, equiv_shear, elastic_indentation, LocalElasticContactForce[2]);
+                LocalElasticContactForce[2] = CalculateNormalForce(elastic_indentation);
+                cohesive_force              = CalculateCohesiveNormalForce(element1, element2, elastic_indentation);
             }
 
             CalculateViscoDampingForce(LocalRelVel, ViscoDampingLocalContactForce, element1, element2);
@@ -137,7 +140,7 @@ namespace Kratos {
                                      sliding, element1, element2, equiv_radius, equiv_young, indentation, previous_indentation, AuxElasticShearForce, MaximumAdmisibleShearForce);
 
             double& elastic_energy = element1->GetElasticEnergy();
-            CalculateElasticEnergyDEM(elastic_energy, indentation, LocalElasticContactForce);
+            CalculateElasticEnergyDEM(elastic_energy, elastic_indentation, LocalElasticContactForce);
 
             if(sliding && MaximumAdmisibleShearForce != 0.0){
                 double& inelastic_frictional_energy = element1->GetInelasticFrictionalEnergy();
@@ -192,14 +195,15 @@ namespace Kratos {
             offset = (effective_radius_new - effective_radius) * AlphaFunction;
 
             effective_radius = effective_radius_new;
+        }
 
-            for (unsigned int i = 0; element->mNeighbourRigidFaces.size(); i++) {
-                if (element->mNeighbourRigidFaces[i]->Id() == wall->Id()) {
-                    element->mNeighbourRigidContactRadius[i] = effective_radius;
-                    if (indentation > offset) element->mNeighbourRigidIndentation[i] = indentation - offset;
-                    else element->mNeighbourRigidIndentation[i] = 0.0;
-                    break;
-                }
+        for (unsigned int i = 0; element->mNeighbourRigidFaces.size(); i++) {
+            if (element->mNeighbourRigidFaces[i]->Id() == wall->Id()) {
+                element->mNeighbourRigidContactRadius[i] = effective_radius;
+                if (indentation > offset) element->mNeighbourRigidIndentation[i] = indentation - offset;
+                else element->mNeighbourRigidIndentation[i] = 0.0;
+                element->mNeighbourRigidIndentation[i] = indentation;
+                break;
             }
         }
 
@@ -225,12 +229,14 @@ namespace Kratos {
         //Get effective Radius
         double effective_radius    = element->GetParticleContactRadius();
 
+        double elastic_indentation = 0.0;
+
         for (unsigned int i = 0; element->mNeighbourRigidFaces.size(); i++) {
             if (element->mNeighbourRigidFaces[i]->Id() == wall->Id()) {
                 if (element->mNeighbourRigidContactRadius[i] > effective_radius) {
                     effective_radius = element->mNeighbourRigidContactRadius[i];
-                    indentation = element->mNeighbourRigidIndentation[i] + (indentation - previous_indentation);
-                    if (indentation < 0.0) element->mNeighbourRigidIndentation[i] = indentation = 0.0;
+                    elastic_indentation = element->mNeighbourRigidIndentation[i] + (indentation - previous_indentation);
+                    if (elastic_indentation < 0.0) element->mNeighbourRigidIndentation[i] = elastic_indentation = 0.0;
                 }
                 break;
             }
@@ -253,17 +259,17 @@ namespace Kratos {
             //Level of fouling in case it is considered
             const double equiv_level_of_fouling = 1.0 + element->GetLevelOfFouling();
 
-            InitializeDependentContactWithFEM(effective_radius, equiv_level_of_fouling, equiv_young, equiv_shear, indentation);
+            InitializeDependentContactWithFEM(effective_radius, equiv_level_of_fouling, equiv_young, equiv_shear, elastic_indentation);
 
-            LocalElasticContactForce[2] = CalculateNormalForce(indentation);
-            cohesive_force              = CalculateCohesiveNormalForceWithFEM(element, wall, indentation);
+            LocalElasticContactForce[2] = CalculateNormalForce(elastic_indentation);
+            cohesive_force              = CalculateCohesiveNormalForceWithFEM(element, wall, elastic_indentation);
 
-            double contact_stress = (3 * LocalElasticContactForce[2]) / (2 * Globals::Pi * equiv_level_of_fouling * effective_radius * indentation);
+            double contact_stress = (3 * LocalElasticContactForce[2]) / (2 * Globals::Pi * equiv_level_of_fouling * effective_radius * elastic_indentation);
 
             if (contact_stress > element->GetParticleMaxStress()) {
-                DamageContactWithFEM(element, wall, effective_radius, equiv_level_of_fouling, equiv_young, equiv_shear, indentation, LocalElasticContactForce[2]);
-                LocalElasticContactForce[2] = CalculateNormalForce(indentation);
-                cohesive_force              = CalculateCohesiveNormalForceWithFEM(element, wall, indentation);
+                DamageContactWithFEM(element, wall, effective_radius, equiv_level_of_fouling, equiv_young, equiv_shear, elastic_indentation, LocalElasticContactForce[2]);
+                LocalElasticContactForce[2] = CalculateNormalForce(elastic_indentation);
+                cohesive_force              = CalculateCohesiveNormalForceWithFEM(element, wall, elastic_indentation);
             }
 
             CalculateViscoDampingForceWithFEM(LocalRelVel, ViscoDampingLocalContactForce, element, wall);
@@ -282,7 +288,7 @@ namespace Kratos {
                                             sliding, element, wall, effective_radius, equiv_young, indentation, previous_indentation, AuxElasticShearForce, MaximumAdmisibleShearForce);
 
             double& elastic_energy = element->GetElasticEnergy();
-            CalculateElasticEnergyFEM(elastic_energy, indentation, LocalElasticContactForce);//MSIMSI
+            CalculateElasticEnergyFEM(elastic_energy, elastic_indentation, LocalElasticContactForce);//MSIMSI
 
             if(sliding && MaximumAdmisibleShearForce != 0.0){
                 double& inelastic_frictional_energy = element->GetInelasticFrictionalEnergy();
