@@ -88,6 +88,8 @@ class ConstructionUtility
     {
         KRATOS_TRY;
 
+        const double time = mrThermalModelPart.GetProcessInfo()[TIME];
+
         const int nelements = mrMechanicalModelPart.GetMesh(0).Elements().size();
         const int nnodes = mrMechanicalModelPart.GetMesh(0).Nodes().size();
 
@@ -105,8 +107,26 @@ class ConstructionUtility
             {
                 ModelPart::ElementsContainerType::iterator it = el_begin + k;
                 ModelPart::ElementsContainerType::iterator it_thermal = el_begin_thermal + k;
-                it->Set(ACTIVE, false);
-                it_thermal->Set(ACTIVE, false);
+
+                const unsigned int number_of_points = (*it).GetGeometry().PointsNumber();
+                bool active_element = true;
+
+                for (unsigned int i_node = 0; i_node < number_of_points; ++i_node)
+                {
+                    if ((*it).GetGeometry()[i_node].FastGetSolutionStepValue(TIME_ACTIVATION) > time)
+                    {
+                        active_element = false;
+                        break;
+                    }
+                }
+                if (active_element) {
+                    it->Set(ACTIVE, true);
+                    it_thermal->Set(ACTIVE, true);
+                }
+                else {
+                    it->Set(ACTIVE, false);
+                    it_thermal->Set(ACTIVE, false);
+                }
             }
 
             // Same nodes for both computing model part
@@ -115,8 +135,15 @@ class ConstructionUtility
             for (int i = 0; i < nnodes; ++i)
             {
                 ModelPart::NodesContainerType::iterator it = it_begin + i;
-                it->Set(ACTIVE, false);
-                it->Set(SOLID, false);
+
+                if (it->FastGetSolutionStepValue(TIME_ACTIVATION) > time) {
+                    it->Set(ACTIVE, false);
+                    it->Set(SOLID, false);
+                }
+                else {
+                    it->Set(ACTIVE, true);
+                    it->Set(SOLID, true);
+                }
             }
         }
 
