@@ -67,6 +67,8 @@ class DamConstructionUtility:
         self.Construction = ConstructionUtility(self.mechanical_model_part,self.thermal_model_part, self.table_ambient, parameters)
 
     def Initialize(self):
+        self.Construction.Initialize()
+
         # The function recieves the mame of submodel Part, the number of phase and the activation time
         print("Assigning time activation for each node")
         with open(self.construction_input_file_name,'r') as file_name2:
@@ -75,8 +77,6 @@ class DamConstructionUtility:
                 if (len(file_2)) > 1:
                     self.name_sub_thermal_part = "sub_Thermal_" + file_2[1]
                     self.Construction.AssignTimeActivation(self.name_sub_thermal_part,int(file_2[2]),float(file_2[0]), float(file_2[3]))
-
-        self.Construction.Initialize()
 
         self.TemperatureCorrectionCounter = open("TemperatureCorrectionCounter.grf", 'w')
         self.TemperatureCorrectionCounter.write(str("#Time").rjust(12)+" "+str("Counter").rjust(13) + "\n")
@@ -92,7 +92,7 @@ class DamConstructionUtility:
         with open(self.construction_input_file_name,'r') as file_name3:
             for j, line in enumerate(file_name3):
                 file_3 = line.split(" ")
-                if ((len(file_3)) > 1 and ((time <=(float(file_3[0])*time_unit_converter+tol)) and (time >=(float(file_3[0])*time_unit_converter-tol)))):
+                if ((len(file_3)) > 1 and (time >=(float(file_3[0])*time_unit_converter-tol))):
                     print("New phase has been activated...")
                     self.name_sub_thermal_part = "sub_Thermal_" + file_3[1]
                     self.name_sub_mechanical_part = "sub_Parts_" + file_3[1]
