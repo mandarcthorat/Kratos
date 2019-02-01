@@ -508,7 +508,7 @@ void FIC<TElementData>::CalculateTau(
     const double density = this->GetAtCoordinate(rData.Density,rData.N);
     const double viscosity = this->GetAtCoordinate(rData.EffectiveViscosity,rData.N);
 
-    double InvTau = c1 * viscosity / (Havg*Havg) + density * c2 * velocity_norm / Havg;
+    double InvTau = c1 * viscosity / (Havg*Havg) + density * (c2 * velocity_norm / Havg + rData.DynamicTau / rData.DeltaTime);
     TauIncompr = 1.0/InvTau;
     TauMomentum = (Hvel / (density * c2 * velocity_norm) );
 
