@@ -49,11 +49,13 @@ class PfemSolution(MainSolid.Solution):
             constraints_processes = processes_parameters["constraints_process_list"]
             if(self.echo_level>1):
                 print(" CONSTRAINTS_PROCESSES ", processes_parameters["constraints_process_list"].PrettyPrintJsonString())
-            extended_constraints_processes = self._set_isolated_nodes_management_process(constraints_processes)
-            processes_parameters.AddValue("constraints_process_list", extended_constraints_processes)
+            # extended_constraints_processes = self._set_isolated_nodes_management_process(constraints_processes)
+            # processes_parameters.AddValue("constraints_process_list", extended_constraints_processes)
             extended_constraints_processes = self._set_selected_elements_management_process(constraints_processes)
             processes_parameters.AddValue("constraints_process_list", extended_constraints_processes)
             extended_constraints_processes = self._set_ale_mesh_movement_constraints(constraints_processes)
+            processes_parameters.AddValue("constraints_process_list", extended_constraints_processes)
+            extended_constraints_processes = self._set_free_surface_pressure(constraints_processes)
             processes_parameters.AddValue("constraints_process_list", extended_constraints_processes)
             if(self.echo_level>1):
                 print(" EXTENDED_CONSTRAINTS_PROCESSES ", processes_parameters["constraints_process_list"].PrettyPrintJsonString())
@@ -211,6 +213,30 @@ class PfemSolution(MainSolid.Solution):
                                     constraints_processes[i]["Parameters"].AddEmptyList("flags_list")
                                     constraints_processes[i]["Parameters"]["flags_list"].Append("NOT_SLIP")
                                     constraints_processes.Append(ale_settings)
+
+        return constraints_processes
+
+    def _set_free_surface_pressure(self, constraints_processes):
+
+        solver_parameters = self.ProjectParameters["solver_settings"]["Parameters"]
+        if solver_parameters.Has("time_integration_settings"):
+            if solver_parameters["time_integration_settings"].Has("analysis_type"):
+                if solver_parameters["time_integration_settings"]["analysis_type"].GetString() == "ALE":
+
+
+                    default_settings = KratosMultiphysics.Parameters("""
+                    {
+                        "python_module" : "assign_free_surface_pressure_process",
+                        "kratos_module" : "KratosMultiphysics.PfemApplication",
+                        "Parameters"    : {
+                        }
+                    }
+                    """)
+
+                    model_part_name = self.model.GetMainModelPart().Name
+                    default_settings["Parameters"].AddEmptyValue("model_part_name").SetString(model_part_name)
+
+                    constraints_processes.Append(default_settings)
 
         return constraints_processes
 
