@@ -75,14 +75,14 @@
                     "python_module"                 : "fluid_meshing_strategy",
                     "meshing_frequency"             : 0,
                     "remesh"                        : true,
-                    "refine"                        : true,
+                    "refine"                        : false,
                     "reconnect"                     : false,
                     "transfer"                      : false,
                     "constrained"                   : false,
                     "mesh_smoothing"                : false,
                     "variables_smoothing"           : false,
                     "elemental_variables_to_smooth" : ["DETERMINANT_F"],
-                    "reference_element_type"        : "UpdatedLagrangianSegregatedFluidElement2D3N",
+                    "reference_element_type"        : "QSVMS2D3N",
                     "reference_condition_type"      : "CompositeCondition2D2N"
                 },
                 "spatial_bounding_box"            : {
@@ -155,7 +155,7 @@
             "variable_name"       : "PRESSURE",
             "value"               : 0.0,
             "compound_assignment" : "direct",
-            "interval"            : [0.0,"End"]
+            "interval"            : [15.0,"End"]
         }
     }],
     "loads_process_list"       : [{
@@ -195,7 +195,8 @@
             "output_control_type" : "step",
             "output_frequency"    : 1,
             "node_output"         : true,
-            "nodal_flags_results" : ["FREE_SURFACE","INLET"],
+            "nodal_flags_results" : ["FREE_SURFACE","INLET","RIGID","FLUID"],
+            "elemental_conditional_flags_results" : [],
             "nodal_results"       : ["DISPLACEMENT","VELOCITY","ACCELERATION","PRESSURE","NORMAL","BODY_FORCE","MESH_VELOCITY"],
             "gauss_point_results" : []
         }
