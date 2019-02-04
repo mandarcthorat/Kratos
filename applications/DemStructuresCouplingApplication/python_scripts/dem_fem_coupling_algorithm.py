@@ -60,6 +60,8 @@ class Algorithm(object):
         # self._DetectStructuresSkin()
         self._TransferStructuresSkinToDem()
 
+        self.dem_solution.Initialize() # Adding DEM variables and reading
+
         mixed_mp = self.model.CreateModelPart('MixedPart')
         filename = os.path.join(self.dem_solution.post_path, self.dem_solution.DEM_parameters["problem_name"].GetString())
         self.gid_output = dem_structures_coupling_gid_output.DemStructuresCouplingGiDOutput(
