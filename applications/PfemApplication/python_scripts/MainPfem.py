@@ -49,8 +49,8 @@ class PfemSolution(MainSolid.Solution):
             constraints_processes = processes_parameters["constraints_process_list"]
             if(self.echo_level>1):
                 print(" CONSTRAINTS_PROCESSES ", processes_parameters["constraints_process_list"].PrettyPrintJsonString())
-            # extended_constraints_processes = self._set_isolated_nodes_management_process(constraints_processes)
-            # processes_parameters.AddValue("constraints_process_list", extended_constraints_processes)
+            extended_constraints_processes = self._set_isolated_nodes_management_process(constraints_processes)
+            processes_parameters.AddValue("constraints_process_list", extended_constraints_processes)
             extended_constraints_processes = self._set_selected_elements_management_process(constraints_processes)
             processes_parameters.AddValue("constraints_process_list", extended_constraints_processes)
             extended_constraints_processes = self._set_ale_mesh_movement_constraints(constraints_processes)
