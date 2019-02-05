@@ -56,11 +56,10 @@ class Algorithm(object):
     def Initialize(self):
         self.structural_solution.Initialize() # Reading mdpa
         self.dem_solution.Initialize() # Adding DEM variables and reading
-
-        # self._DetectStructuresSkin()
+        self._DetectStructuresSkin()
         self._TransferStructuresSkinToDem()
 
-        self.dem_solution.Initialize() # Adding DEM variables and reading
+        # self.dem_solution.Initialize() # Adding DEM variables and reading
 
         mixed_mp = self.model.CreateModelPart('MixedPart')
         filename = os.path.join(self.dem_solution.post_path, self.dem_solution.DEM_parameters["problem_name"].GetString())
@@ -114,18 +113,18 @@ class Algorithm(object):
 
     def _TransferStructuresSkinToDem(self):
         self.structural_mp = self.structural_solution._GetSolver().GetComputingModelPart()
-        self.skin_mp = self.structural_solution._GetSolver().GetComputingModelPart()
-        # self.skin_mp = self.structural_mp.GetSubModelPart("DetectedByProcessSkinModelPart")
+        # self.skin_mp = self.structural_solution._GetSolver().GetComputingModelPart()
+        self.skin_mp = self.structural_mp.GetSubModelPart("DetectedByProcessSkinModelPart")
         dem_walls_mp = self.dem_solution.rigid_face_model_part
         props = Kratos.Properties(0)
-        props[Dem.WALL_FRICTION] = 0.5773502691896257
+        props[Dem.WALL_FRICTION] = 0.2679491924311227
         props[Dem.WALL_COHESION] = 0.0
         props[Dem.COMPUTE_WEAR] = False
         props[Dem.SEVERITY_OF_WEAR] = 0.001
         props[Dem.IMPACT_WEAR_SEVERITY] = 0.001
         props[Dem.BRINELL_HARDNESS] = 200.0
-        props[Kratos.YOUNG_MODULUS] = 1e8
-        props[Kratos.POISSON_RATIO] = 0.25
+        props[Kratos.YOUNG_MODULUS] = 2.4e8
+        props[Kratos.POISSON_RATIO] = 0.2
         dem_walls_mp.AddProperties(props)
         DemFem.DemStructuresCouplingUtilities().TransferStructuresSkinToDem(self.skin_mp, dem_walls_mp, props)
 
