@@ -78,10 +78,6 @@ class DamConstructionUtility:
                     self.name_sub_thermal_part = "sub_Thermal_" + file_2[1]
                     self.Construction.AssignTimeActivation(self.name_sub_thermal_part,int(file_2[2]),float(file_2[0]), float(file_2[3]))
 
-        self.TemperatureCorrectionCounter = open("TemperatureCorrectionCounter.grf", 'w')
-        self.TemperatureCorrectionCounter.write(str("#Time").rjust(12)+" "+str("Counter").rjust(13) + "\n")
-        self.TemperatureCorrectionCounter.flush()
-
     def BeforeSolutionLoop(self):
 
         time = self.mechanical_model_part.ProcessInfo[TIME]
