@@ -45,14 +45,14 @@ namespace Kratos
 /**
  * @class LinearJ2Plasticity3D
  * @ingroup StructuralMechanicsApplication
- * @brief Defines a Simo J2 plasticity constitutive law in 3D
+ * @brief Defines a Simo J2 plasticity constitutive law in 3D. (Computational Inelasticity - Simo, Hughes. p91)
  * @details This material law is defined by the parameters:
  * - YOUNG_MODULUS
  * - POISSON_RATIO
  * - YIELD_STRESS
- * - REFERENCE_HARDENING_MODULUS (kinematic hardening modulus)
  * - ISOTROPIC_HARDENING_MODULUS
- * - INFINITY_HARDENING_MODULUS (saturation hardening modulus)
+ // TODO: rename INFINITY_HARDENING_MODULUS to EXPONENTIAL_SATURATION_YIELD_STRESS Saturation yield stress of the exponential hardening law.
+ * - EXPONENTIAL_SATURATION_YIELD_STRESS Saturation yield stress of the exponential hardening law.
  * - HARDENING_EXPONENT
  * @warning Valid for small strains, linear hexahedra
  * @note Requires B-bar element
